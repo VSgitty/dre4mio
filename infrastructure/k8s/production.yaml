@@ -1,0 +1,169 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monopol
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monopol-config
+  namespace: monopol
+data:
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "info"
+  FRONTEND_URL: "https://monopolstudio.com"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monopol-api
+  namespace: monopol
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: monopol-api
+  template:
+    metadata:
+      labels:
+        app: monopol-api
+    spec:
+      containers:
+      - name: api
+        image: monopol-api:latest
+        ports:
+        - containerPort: 3001
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: monopol-secrets
+              key: database-url
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: monopol-config
+              key: REDIS_URL
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: monopol-secrets
+              key: jwt-secret
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monopol-api
+  namespace: monopol
+spec:
+  selector:
+    app: monopol-api
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3001
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monopol-ai
+  namespace: monopol
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: monopol-ai
+  template:
+    metadata:
+      labels:
+        app: monopol-ai
+    spec:
+      containers:
+      - name: ai
+        image: monopol-ai:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: monopol-secrets
+              key: openai-key
+        - name: REPLICATE_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: monopol-secrets
+              key: replicate-token
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 60
+          periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monopol-ai
+  namespace: monopol
+spec:
+  selector:
+    app: monopol-ai
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: monopol-api-hpa
+  namespace: monopol
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: monopol-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

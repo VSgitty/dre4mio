@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --monopol-dark: #0a0e27;
+  --monopol-darker: #050810;
+  --monopol-accent: #ff6b35;
+  --monopol-neon: #00d9ff;
+  --monopol-purple: #7c3aed;
+}
+
+@layer base {
+  body {
+    @apply bg-monopol-dark text-white antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-gradient-to-r from-monopol-accent to-monopol-neon text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-monopol-accent/50 transition-all duration-300;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 border-2 border-monopol-neon text-monopol-neon font-semibold rounded-lg hover:bg-monopol-neon/10 transition-all duration-300;
+  }
+
+  .card {
+    @apply p-6 rounded-lg border border-monopol-neon/20 bg-monopol-darker/50 backdrop-blur hover:border-monopol-neon/50 transition-all duration-300;
+  }
+}

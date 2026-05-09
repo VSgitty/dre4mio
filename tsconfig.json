@@ -1,0 +1,69 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@monopol/ui": [
+        "packages/ui"
+      ],
+      "@monopol/ui/*": [
+        "packages/ui/*"
+      ],
+      "@monopol/editor": [
+        "packages/editor"
+      ],
+      "@monopol/editor/*": [
+        "packages/editor/*"
+      ],
+      "@monopol/timeline": [
+        "packages/timeline"
+      ],
+      "@monopol/timeline/*": [
+        "packages/timeline/*"
+      ],
+      "@monopol/types": [
+        "packages/types"
+      ],
+      "@monopol/types/*": [
+        "packages/types/*"
+      ],
+      "@monopol/shared": [
+        "packages/shared"
+      ],
+      "@monopol/shared/*": [
+        "packages/shared/*"
+      ]
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./packages/types"
+    ]
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/.next",
+    "**/dist",
+    "**/build"
+  ]
+}

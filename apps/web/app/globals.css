@@ -1,0 +1,18 @@
+import '@monopol/ui/globals.css';
+
+export const metadata = {
+  title: 'MONOPOL Studio',
+  description: 'AI Cinematic Creation Platform',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}

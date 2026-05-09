@@ -1,0 +1,42 @@
+{
+  "name": "monopol-studio",
+  "version": "0.1.0",
+  "description": "The AI Cinematic Creation Operating System",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "dev:web": "turbo run dev --filter=web",
+    "dev:api": "turbo run dev --filter=api",
+    "dev:ai": "turbo run dev --filter=ai-services",
+    "build": "turbo run build",
+    "build:web": "turbo run build --filter=web",
+    "build:api": "turbo run build --filter=api",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "db:push": "turbo run db:push --filter=api",
+    "db:migrate": "turbo run db:migrate --filter=api",
+    "db:studio": "turbo run db:studio --filter=api",
+    "start": "turbo run start",
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "devDependencies": {
+    "turbo": "^1.11.2",
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
