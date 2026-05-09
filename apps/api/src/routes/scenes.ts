@@ -27,7 +27,8 @@ router.get('/:sceneId', authenticateToken, async (req: AuthRequest, res: Respons
       },
     });
     if (!scene || scene.project.userId !== req.userId) return res.status(404).json({ error: 'Scene not found' });
-    res.json({ scene, clips: scene.clips, assets: scene.clips.map((c) => c.asset).filter(Boolean) });
+    const clips = scene.clips as Array<{ asset: unknown }>;
+    res.json({ scene, clips: scene.clips, assets: clips.map((clip) => clip.asset).filter(Boolean) });
   } catch {
     res.status(500).json({ error: 'Failed to fetch scene' });
   }

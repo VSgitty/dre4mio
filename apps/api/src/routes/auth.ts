@@ -1,7 +1,12 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, type Request, type Response, type NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 const router = Router();
+
+export interface AuthRequest extends Request {
+  userId?: string;
+  user?: unknown;
+}
 
 // Auth middleware
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {

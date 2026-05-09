@@ -4,7 +4,10 @@ import { apiClient } from '@/lib/services/api-client';
 export function useScene(sceneId: string | null) {
   const { data, isLoading: loading } = useQuery({
     queryKey: ['scene', sceneId],
-    queryFn: () => apiClient.get(`/scenes/${sceneId}`),
+    queryFn: async () => {
+      const response = await apiClient.get(`/scenes/${sceneId}`);
+      return response.data;
+    },
     enabled: !!sceneId,
   });
 

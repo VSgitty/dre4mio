@@ -17,13 +17,18 @@ export function useProjects() {
 
   const { data: projects = [], isLoading: loading } = useQuery({
     queryKey: ['projects'],
-    queryFn: () => apiClient.get<Project[]>('/projects'),
+    queryFn: async () => {
+      const response = await apiClient.get<Project[]>('/projects');
+      return response.data;
+    },
     enabled: !!user,
   });
 
   const createMutation = useMutation({
-    mutationFn: ({ name, description }: { name: string; description?: string }) =>
-      apiClient.post<Project>('/projects', { name, description }),
+    mutationFn: async ({ name, description }: { name: string; description?: string }) => {
+      const response = await apiClient.post<Project>('/projects', { name, description });
+      return response.data;
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] }),
   });
 

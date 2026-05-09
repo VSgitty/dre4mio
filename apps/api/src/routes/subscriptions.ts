@@ -82,7 +82,7 @@ router.post('/webhook', async (req: Request, res: Response) => {
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
-        const session = event.data.object as Stripe.CheckoutSession;
+        const session = event.data.object as Stripe.Checkout.Session;
         const { userId, planId } = session.metadata ?? {};
         const plan = PLANS.find((p) => p.id === planId);
         if (!userId || !plan) break;
